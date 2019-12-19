@@ -1,0 +1,67 @@
+---
+title: "R Notebook"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+```{r}
+acs = read.csv(url("http://stat511.cwick.co.nz/homeworks/acs_or.csv"))
+
+dim(acs)
+```
+
+```{r}
+str(acs)
+```
+
+```{r}
+summary(acs)
+```
+
+```{r}
+colnames(acs)
+```
+
+```{r}
+head(acs)
+```
+
+```{r}
+tail(acs)
+```
+
+```{r}
+mean(acs$age_husband)
+```
+
+```{r}
+median(acs$age_husband)
+```
+
+```{r}
+quantile(acs$age_wife)
+```
+
+```{r}
+var(acs$age_wife)
+```
+
+```{r}
+sd(acs$age_wife)
+```
+
+```{r}
+hist(acs$number_children)
+```
+
+```{r}
+counts = table(acs$bedrooms)
+barplot(counts, main="Bedrooms Distribution", xlab="Number of Bedrooms")
+```
+
+```{r}
+s= acs[1:100,]
+plot(x=s$age_husband, y=s$age_wife, type='p')
+```
+

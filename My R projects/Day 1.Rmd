@@ -1,0 +1,36 @@
+
+
+```{r}
+library(RWordPress)
+options(WordpressLogin = c(phongtruong1994 = '0Nholuon3211'),
+        WordpressURL = 'https://datascience4vn.com/xmlrpc.php')
+library(knitr)
+knit2wp('10.17.Rmd', title = 'Your post title')
+
+```
+
+
+```{r}
+##Đây là một code chunk
+## dấu ## nghĩa là comment 
+```
+
+
+
+```{r}
+x = 5 ##gán cho x giá trị là 5
+y = 10 ##gán cho y giá trị là 10
+
+z = x +y  ## z có giá trị là tổng của x và y
+```
+
+
+```{r}
+
+HovaTen = "Lưu Phong Trường"
+
+HovaTen  ##đây là dòng code in HovaTen ra màn hình
+
+```
+
+

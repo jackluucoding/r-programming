@@ -1,0 +1,62 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+
+
+1. Formulate your question: draw a graph the looks the same as the one that shown.
+
+
+2. Read in your data: checked
+
+3. Check the packaging: checked
+
+4. Run str(): checked
+
+5. Look at the top and the bottom of your data: checked 
+
+6. Check your “n”s: checked
+
+7. Validate with at least one external data source: checked
+
+8. Try the easy solution first: checked
+9. Challenge your solution: checked
+10. Follow up: checked
+
+
+```{r}
+library(tidyverse)
+tips<-read_csv("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv")
+
+str(tips)
+cols(
+  total_bill = col_double(),
+  tip = col_double(),
+  sex = col_character(),
+  smoker = col_character(),
+  day = col_character(),
+  time = col_character(),
+  size = col_integer()
+  )
+
+head(tips, 5)
+tail(tips,5)
+
+
+```
+```{r}
+nrow(tips)
+```
+
+
+```{r}
+require(ggplot2)
+jack <- ggplot(tips, aes(x = total_bill, y = tip)) + geom_point(aes(color = tips$`time`), shape = 1) + geom_smooth()
+jack + xlab("Toatl Bill") + ylab("Tip")   
+ 
+```
+
+

@@ -1,0 +1,67 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+IT344-F19
+Jack Luu
+
+
+#1.	Write an example of a rule with high confidence? 
+
+In rhs ‘other vegetables’, the highest confidence is {citrus fruit,root vegetables}
+
+In rhs ‘whole milk’, the highest confidence is {curd,yogurt}    
+
+
+
+#2.	Write an example of a rule with high lift?
+
+In rhs ‘other vegetables’, the highest lift is rule {citrus fruit,root vegetables}        
+
+In rhs ‘whole milk’, the highest lift is rule {curd,yogurt}                         
+
+
+#3.	Which one will you pick if you were to choose product shelving decision in a grocery store? 
+
+I will pick the rule with high lift and high confidence, with the focus on lift. 
+
+Why? Because some rule have high confidence but low lift. 
+Lift gives us information about the increase in probability of the consequent given the if antecedent part.
+
+
+#R Code
+
+```{r}
+library(arules)
+library(arulesViz)
+```
+
+```{r}
+data ("Groceries")
+class(Groceries)
+```
+
+```{r}
+inspect(head(Groceries))
+```
+
+```{r}
+myRules<-apriori(Groceries, parameter=list (support=0.01, confidence=0.5))
+inspect(myRules)
+
+```
+```{r}
+inspect (head(sort(myRules, by="confidence"), 3))
+```
+```{r}
+wholemilkRules <- apriori(data=Groceries, parameter=list (supp=0.001,conf = 0.08), appearance = list (rhs="whole milk"))
+```
+```{r}
+mySortedRules<-sort(myRules, by="lift")
+inspect(mySortedRules)
+
+```
+
+

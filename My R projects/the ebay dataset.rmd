@@ -1,0 +1,88 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+library(tidyverse)
+exfile <- "http://www.itk.ilstu.edu/faculty/jrwolf/ebay.csv"
+df <- read_csv(exfile)
+```
+
+# b. Examine the data (look at head and tail)
+
+```{r}
+head(df)
+tail(df)
+```
+
+# c. Examine the structure (str) of the data
+```{r}
+str(df)
+```
+
+# d1. Find the Mean (mean) and Standard Deviation (sd) by old/new of Price
+
+```{r}
+df %>% group_by(Cond) %>% summarize(Mean = mean(Price))
+
+df %>% group_by(Cond) %>% summarize(Standard_Dev = sd(Price))
+```
+
+
+# d2. Find the Mean (mean) and Standard Deviation (sd) by male/female of Price
+
+```{r}
+df %>% group_by(Gender) %>% summarize(Mean = mean(Price))
+
+df %>% group_by(Gender) %>% summarize(Standard_Dev = sd(Price))
+
+#summary(df)
+```
+
+# e1. Create a boxplot of Price (by old/new)
+```{r}
+p <- ggplot(df, aes(x=Cond, y=Price)) + geom_boxplot()
+p
+```
+
+# e2. Create a boxplot of Price (by male/female)
+```{r}
+p1 <- ggplot(df, aes(x=Gender, y=Price)) + geom_boxplot()
+p1
+```
+
+
+# f. Create a histogram of Price (by color)
+```{r}
+p2 <- ggplot(df, aes(x=Color, y=Price))+
+  geom_histogram(stat='identity', color="dark blue")
+p2
+```
+
+
+# g1. Run a t-test on Price (by old/new)
+```{r}
+ind.t.test<-t.test(Price ~ Cond, data = df)
+
+ind.t.test
+```
+
+
+# g2. Run a t-test on Price (by male/female)
+```{r}
+ind.t.test<-t.test(Price ~ Gender, data = df)
+
+ind.t.test
+```
+
+
+# h. report your findings for both t-tests using APA format (https://www.socscistatistics.com/tutorials/ttest/default.aspx)
+
+##A t-test on Price by old/new
+ 
+The old products (M=31.4, SD=11.1) compared to the new products (M= 42.7, SD = 8.7) demonstrated significantly lower price scores, t(790.57) = 17.91 ,p < 2.2e-16
+
+There was no significant effect for sex, t(1044) = 0.945, p = 0.3448, despite women (M = 38.48,SD = 10.33) paying more than men (M = 37.83, SD = 12.20).
+
+ 

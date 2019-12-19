@@ -1,0 +1,371 @@
+---
+output:
+  html_document: default
+  word_document: default
+---
+# Part I 
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+df <- readRDS("tidytuesday_tweets.rds")
+#head(df)
+#tail(df)
+#str(df)
+```
+
+
+####  1. Count the number of tweets per screen_name and omit all screen names with less than 25 tweets. 
+```{r}
+df1 <- df %>% group_by(screen_name) %>% tally()
+#df1
+```
+
+*Eliminate screens with less than 25 tweets*
+```{r}
+df25 <- df1[ which(df1$n>24),]
+#df25 
+```
+
+#### 2. Using a bar graph to show the data.
+
+```{r}
+p<-ggplot(data=df25, aes(x=screen_name, y=n)) +
+  geom_bar(stat="identity", fill="purple") + theme_classic() + xlab("Screen Name") + ylab("Number of Tweets") +
+    ggtitle("Screen Name and Tweets Histogram")
+p 
+```
+
+
+#### 3. Basic information on these 4 accounts.
+
+Harro Cyranka is working on analytics and data science, political campaigns, and other cool stuff. His expertise is on predictive modeling, text mining, data visualization, and app development using R Shiny. He has some good looking nerdy graphs on his Twitter account.
+
+R4DScommunity is a community of R learners to help learners and mentors to gather and work through the R for Data Science book by Garrett Grolemund and Hadley Wickham. 
+
+Thomas Mock is fascinated by R, RStudio, the tidyverse, and appreciates open-source tools in general. He created and runs #TidyTuesday on Twitter to help bring the R/Tidyverse concepts to data science newcomers. He is the co-founder of #TidyTuesday. His avatar looks good.
+
+Alyssa Goldberg (aka WireMonkey) claims herself as a "data witch". Based on her Tweets, we can tell that she is interested in hierarchical clustering, internet memes, tidyTuesday, and other things.
+
+# Part II 
+
+#### 2.1 Install and load the rtweet package
+```{r}
+library(rtweet)
+```
+
+#### 2.2 Use ts_plot() to create a line graph of the twitter data
+
+```{r}
+ts_plot(df, "1 weeks") + theme_classic() + theme(plot.title = element_text(face = "bold")) + labs(
+    x = "Months in year", y = " Frequency",
+    title = "Tweets data as a time series",
+    subtitle = "This graph is created using interval of time expressed as 1 week",
+    caption = "\nSource: Data collected from #TidyTuesday"
+  )
+```
+
+#### 2.3 Write a two sentence explanation of the graph.
+
+*Overall, the frequency fluctuates among the timeline. At the weekly interval, the graph illustrates that the number of tweets reached highest in between April and May and they dropped right after July and fluctuated again from August to December. *
+
+####  2.4 Limit the data to only the 4 screen names in part I
+```{r}
+df_4names <- subset(df, screen_name == "harrocyranka"|screen_name == "WireMonkey"|screen_name == "R4DScommunity"| screen_name == "thomas_mock")
+#head(df_4names)
+#tail(df_4names)
+#str(df_4names)
+```
+
+#### 2.4.1 Subset into 4 individual screens
+```{r}
+thomas <- subset(df_4names, screen_name =="thomas_mock")
+r4ds <- subset(df_4names, screen_name =="R4DScommunity")
+harro <- subset(df_4names, screen_name =="harrocyranka")
+wiremonkey <- subset(df_4names, screen_name == "WireMonkey")
+```
+
+
+
+####  2.5 Recreate the graph above with the reduced data.
+
+```{r}
+ts_plot(df_4names, "1 weeks") + theme_classic() + theme(plot.title = element_text(face = "bold")) + labs(
+    x = "Months in year", y = " Frequency",
+    title = "Tweets data of Thomas, Harro, WireMonkey, & R4DScommunity as time series",
+    subtitle = "This graph is created using interval of time expressed as 1 week",
+    caption = "\nSource: Data collected from #TidyTuesday"
+  )
+```
+```{r}
+ts_plot(thomas,"1 weeks") + theme_classic() + theme(plot.title = element_text(face = "bold")) + labs(
+    x = "Months in year", y = " Frequency",
+    title = "Tweets data of Thomas",
+    subtitle = "This graph is created using interval of time expressed as 1 week",
+    caption = "\nSource: Data collected from #TidyTuesday"
+  ) 
+```
+
+```{r}
+ts_plot(r4ds,"1 weeks") + theme_classic() + theme(plot.title = element_text(face = "bold")) + labs(
+    x = "Months in year", y = " Frequency",
+    title = "Tweets data of R4DS",
+    subtitle = "This graph is created using interval of time expressed as 1 week",
+    caption = "\nSource: Data collected from #TidyTuesday"
+  ) 
+```
+
+```{r}
+ts_plot(harro,"1 weeks") + theme_classic() + theme(plot.title = element_text(face = "bold")) + labs(
+    x = "Months in year", y = " Frequency",
+    title = "Tweets data of Harro Cyranka",
+    subtitle = "This graph is created using interval of time expressed as 1 week",
+    caption = "\nSource: Data collected from #TidyTuesday"
+  ) 
+```
+
+```{r}
+ts_plot(wiremonkey,"1 weeks") + theme_classic() + theme(plot.title = element_text(face = "bold")) + labs(
+    x = "Months in year", y = " Frequency",
+    title = "Tweets data of Wire Monkey",
+    subtitle = "This graph is created using interval of time expressed as 1 week",
+    caption = "\nSource: Data collected from #TidyTuesday"
+  ) 
+```
+
+####  2.6 Write a two sentence explanation of the graph.
+
+*Base on the graphs, it seems that the four examined screennames were tweeting harmoniously along with the master dataset (df). They are likely to tweet more around April and May than any other period. *
+
+#### 2.7 Use plain_tweets() to find the top 25 words tweeted by the 4 screen names.
+
+```{r}
+library(tokenizers) #Could not use the tokenize argument, thus I have to install the "Tokenizers" package to do the job.
+#Convert to plain text
+
+thomas_plain <- tokenize_words(plain_tweets(thomas$text))
+r4ds_plain <- tokenize_words(plain_tweets(r4ds$text))
+harro_plain<- tokenize_words(plain_tweets(harro$text))
+wiremonkey_plain <- tokenize_words(plain_tweets(wiremonkey$text))
+```
+
+
+```{r}
+count_thomas <- table(unlist(thomas_plain))
+count_r4ds <- table(unlist(r4ds_plain)) 
+count_harro <- table(unlist(harro_plain)) 
+count_wiremonkey <- table(unlist(wiremonkey_plain)) 
+```
+
+*Thomas's top 25 words*
+```{r}
+thomas_25 = head(sort(count_thomas, decreasing = TRUE), 25)
+#thomas_25
+```
+
+*R4DS's top 25 words*
+```{r}
+r4ds_25 = head(sort(count_r4ds, decreasing = TRUE), 25)
+#r4ds_25
+```
+*Haro's top 25 words*
+```{r}
+harro_25 = head(sort(count_harro, decreasing = TRUE), 25)
+#harro_25
+```
+*Wiremonkey's top 25 words*
+```{r}
+wiremonkey_25 = head(sort(count_wiremonkey, decreasing = TRUE), 25)
+#wiremonkey_25
+```
+
+#### 2.8 Use the syuzhet package to conduct sentiment analysis.
+
+
+#### 2.8.1 Tokenizing 
+```{r}
+library(syuzhet)
+thomas_words <- get_tokens(thomas$text, pattern = "\\W") 
+r4ds_words <- get_tokens(r4ds$text, pattern = "\\W")
+harro_words <- get_tokens(harro$text, pattern = "\\W")
+wiremonkey_words <- get_tokens(wiremonkey$text, pattern = "\\W")
+```
+
+#### 2.8.2 Conducting sentiment analysis for each screen name (just use one method named: "syuzhet" )
+```{r}
+thomas_syuzhet_vector <- get_sentiment(thomas_words, method="syuzhet")
+r4ds_syuzhet_vector <- get_sentiment(r4ds_words, method="syuzhet")
+harro_syuzhet_vector <- get_sentiment(harro_words, method="syuzhet")
+wiremonkey_syuzhet_vector <- get_sentiment(wiremonkey_words, method="syuzhet")
+
+sum(thomas_syuzhet_vector) 
+sum(r4ds_syuzhet_vector) 
+sum(harro_syuzhet_vector) 
+sum(wiremonkey_syuzhet_vector) 
+```
+
+*Thomas's Sentiment Analysis*
+```{r}
+summary(thomas_syuzhet_vector)
+```
+```{r}
+percent_vals_thomas <- get_percentage_values(thomas_syuzhet_vector, bins = 300)
+
+plot(
+  percent_vals_thomas, 
+  type="l", 
+  main="Thomas's Sentiment Analysis", 
+  xlab = "Narrative Time", 
+  ylab= "Emotional Valence"
+  )
+```
+
+*R4DS's Sentiment Analysis*
+```{r}
+summary(r4ds_syuzhet_vector)
+```
+```{r}
+percent_vals_r4ds <- get_percentage_values(r4ds_syuzhet_vector, bins = 300)
+
+plot(
+  percent_vals_r4ds, 
+  type="l", 
+  main="R4DS's Sentiment Analysis", 
+  xlab = "Narrative Time", 
+  ylab= "Emotional Valence"
+  )
+```
+
+*Harro Cyranka's Sentiment Analysis*
+
+```{r}
+summary(harro_syuzhet_vector)
+```
+```{r}
+percent_vals_harro <- get_percentage_values(harro_syuzhet_vector, bins = 300)
+
+plot(
+  percent_vals_harro, 
+  type="l", 
+  main="Harro Cyranka's Sentiment Analysis", 
+  xlab = "Narrative Time", 
+  ylab= "Emotional Valence"
+  )
+```
+
+
+*Wire Monkey's Sentiment Analysis*
+```{r}
+summary(wiremonkey_syuzhet_vector)
+```
+
+```{r}
+percent_vals_wiremonkey <- get_percentage_values(wiremonkey_syuzhet_vector, bins = 300)
+
+plot(
+  percent_vals_wiremonkey, 
+  type="l", 
+  main="Wire Monkey's Sentiment Analysis", 
+  xlab = "Narrative Time", 
+  ylab= "Emotional Valence"
+  )
+```
+
+
+
+#### Comment about the graphs (Write a two sentence explanation of the graph): 
+
+*No screen names have negative sentiment scores and the general average scores are slightly higher than 0. Among the four screen names, Thomas has the highest average sentiment score (0.04932) while the lowest average score belongs to Wire Monkey (0.04932). R4DS and Harro have average scores of 0.0367 and 0.01568, respectively. * 
+
+
+#### 2.9 Separate the data into 2 dataframes: include @hadleywickham and do not
+```{r}
+wickham = subset(df, grepl("hadleywickham", mentions_screen_name))
+#wickham
+#21 of them do mention wickham  
+```
+
+
+
+```{r}
+no_wickham = subset(df, !grepl("hadleywickham", mentions_screen_name))
+#head(no_wickham)
+#tail(no_wickham)
+#str(no_wickham)
+
+#no_wickham # 1544 tweets that don't mention Wickham 
+```
+
+#### 2.10 Conduct sentiment analysis on the two datasets.
+
+##### 2.10.1 Tweets that mentions Wickham Sentiment Analysis 
+```{r}
+wickham_words <- get_tokens(wickham$text, pattern = "\\W") #tokenize into single words
+#str(wickham_words)
+wickham_syuzhet_vector <- get_sentiment(wickham_words, method="syuzhet")
+str(wickham_syuzhet_vector)
+summary(wickham_syuzhet_vector)
+```
+
+###### 2.10.2 Tweets that Mentions do not mention Wickham Sentiment Analysis 
+```{r}
+no_wickham_words <- get_tokens(no_wickham$text, pattern = "\\W") #tokenize into single words
+#no_wickham_words
+no_wickham_syuzhet_vector <- get_sentiment(no_wickham_words, method="syuzhet")
+str(no_wickham_syuzhet_vector)
+summary(no_wickham_syuzhet_vector)
+```
+
+
+###### 2.10.3 Combine two vectors together and convert it to a dataframe 
+```{r}
+combined = cbind(no_wickham_syuzhet_vector,wickham_syuzhet_vector)
+combined = as.data.frame(combined)
+#head(combined)
+#tail(combined)
+#str(combined)
+```
+
+##### 2.10.4 Make the data frame easy to conduct the t-test 
+```{r}
+df_combined <- gather(combined, key="measure", value="value", c("no_wickham_syuzhet_vector", "wickham_syuzhet_vector"))
+#head(df_combined)
+#tail(df_combined)
+#str(df_combined)
+```
+
+*Calculate mean and standard deviation*
+```{r}
+df_combined%>% group_by(measure) %>%  summarize(Program_sd = sd(value))
+df_combined%>% group_by(measure) %>%  summarize(Mean = mean(value))
+```
+
+
+#### 2.11 Run a t-test on to see include @hadleywickham are more or less positive than tweets without. 
+```{r}
+ind.t.test<-t.test(value ~ measure, data = df_combined)
+ind.t.test
+
+#str(ind.t.test)
+```
+
+#### Report t-test 
+
+```{r}
+#str(summary(ind.t.test))
+pval <- ind.t.test$p.value
+tval <- ind.t.test$statistic
+
+```
+
+
+The 21 tweets that mention Hadley Wickham (M = 0.0374, SD = 0.1901793 ) compared to the 1544 tweets that do not mention Hadley Wickham (M = 0.02541, SD = 0.1759960) demonstrated significantly better sentiment scores, t(96602) = `r round(tval,5)`   , p = `r round(pval,30)`    
+
+
+
+
+
+

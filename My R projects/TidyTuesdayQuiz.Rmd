@@ -1,0 +1,85 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+library(rtweet)
+library(ggplot2)
+library(dplyr)
+#https://rtweet.info/articles/auth.html
+library(httpuv)
+```
+
+
+# Examinate the dataset
+
+```{r}
+df <- readRDS("tidytuesday_tweets.rds")
+head(df)
+tail(df)
+str(df)
+```
+```{r}
+df1 <- readRDS("rstats_tweets.rds")
+head(df1)
+tail(df1)
+str(df1)
+```
+
+
+
+
+
+
+# Playing with Twitter Developer API
+
+```{r}
+#api_key <- "2LS4jgnxQ6BiFf5bQKr8Mg01P"
+#api_secret_key <- "cJMEWpAgqinjqEUWK90qK3V6L3zK4S3x6RpnXOmTMYumnbHIVT"
+#access_token <- "476502438-jak04IiXsHi5eMBk2EO2ArIJQjkjrkZamcaqZKSv"
+#access_token_secret <- "jAQ77XXRDm5yUR50Wz2MBI1h9HfqxhJG7o9HsrsftwKwf"
+```
+
+
+```{r}
+#token <- create_token(
+ # app = "JackTidyTuesday",
+  #consumer_key = api_key,
+  #consumer_secret = api_secret_key,
+  #access_token = access_token,
+  #access_secret = access_token_secret)
+```
+```{r}
+## check to see if the token is loaded
+#get_token()
+```
+```{r}
+## search for 500 tweets using the ##CyberMondayCdiscount hashtag
+##team_rstats <- search_tweets("#CyberMondayCdiscount", n = 100)
+##team_rstats
+```
+
+```{r}
+## return 100 tweets from @MikeBloomberg's timeline
+#Mike <- get_timeline("MikeBloomberg", n = 100)
+
+#Mike
+```
+```{r}
+# post_tweet("This sentence was posted using #rtweet")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

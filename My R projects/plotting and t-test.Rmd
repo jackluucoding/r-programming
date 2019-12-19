@@ -1,0 +1,71 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+# create an R Markdown notebook give the notebook file the name 102419.Rmd
+# 1 Enter data into a dataframe called Cloak:
+
+Group<-gl(2, 12, labels = c("No Cloak", "Cloak"))
+Mischief<-c(3, 1, 5, 4, 6, 4, 6, 2, 0, 5, 4, 5, 4, 3, 6, 6, 8, 5, 5, 4, 2, 5, 7, 5)
+Cloak<-data.frame(Group, Mischief)
+
+# 2 draw boxplot of the Invisibility data:
+# 3 draw a histogram of the Invisibility data use facet_wrap(~ Group):
+# 4 make the above a bit nicer (adjust the bins) 
+# 5 create a t-test of Mischief by Group using invisibility data:
+#6 explain the results
+```
+
+
+```{r}
+head(Cloak,3)
+```
+
+
+```{r}
+# 2 draw boxplot of the Invisibility data:
+library(tidyverse)
+ggplot(Cloak, aes(x=Group, y=Mischief)) + geom_boxplot();
+```
+```{r}
+# 3 draw a histogram of the Invisibility data use facet_wrap(~ Group):
+
+ggplot(Cloak, aes(x=Mischief)) + geom_histogram( fill="Purple", color="black", breaks = seq(0,8, by=1)) + facet_grid(~Group)
+
+```
+```{r}
+# 5 create a t-test of Mischief by Group using invisibility data:
+library(psych)
+ind.t.test<-t.test(Mischief~Group, data = Cloak)
+
+ind.t.test
+
+
+```
+
+
+On average, participants experienced greater mischief (M = 5.00), than who are not cloak (M = 3.5). This difference was not significant, t(21.541) = −1.7135, p = 0.101.
+```{r}
+#Part 2
+#1 Load the drug data
+
+sundayBDI<-c(15, 35, 16, 18, 19, 17, 27, 16, 13, 20, 16, 15, 20, 15, 16, 13, 14, 19, 18, 18)
+wedsBDI<-c(28, 35, 35, 24, 39, 32, 27, 29, 36, 35, 5, 6, 30, 8, 9, 7, 6, 17, 3, 10)
+drug<-gl(2, 10, labels = c("Ecstasy", "Alcohol"))
+drugData<-data.frame(drug, sundayBDI, wedsBDI)
+
+
+
+#2 run the tests below
+
+sunModel<-wilcox.test(wedsBDI ~ drug, data = drugData)
+sunModel
+
+sunModel<-wilcox.test(sundayBDI ~ drug, data = drugData)
+sunModel
+
+# 3 explain the results0
+```
+

@@ -1,0 +1,118 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r}
+library(tidyverse)
+```
+
+
+# a. Reading in the data (R code given)
+```{r}
+
+
+Input =("
+Program                            Student  WPM
+'Dance Mat Typing'      a        35
+'Dance Mat Typing'      b        50
+'Dance Mat Typing'      c        55
+'Dance Mat Typing'      d        60
+'Dance Mat Typing'      e        65
+'Dance Mat Typing'      f        60
+'Dance Mat Typing'      g        70
+'Dance Mat Typing'      h        55
+'Dance Mat Typing'      i        45
+'Dance Mat Typing'      j        55
+'Dance Mat Typing'      k        60
+'Dance Mat Typing'      l        45
+'Dance Mat Typing'      m        65
+'Dance Mat Typing'      n        55
+'Dance Mat Typing'      o        50
+'Dance Mat Typing'      p        60
+'TypingClub'               q        55
+'TypingClub'               r        60
+'TypingClub'               s        75
+'TypingClub'               t        65
+'TypingClub'               u        60
+'TypingClub'               v        70
+'TypingClub'               w        75
+'TypingClub'               x        70
+'TypingClub'               y        65
+'TypingClub'               z        72
+'TypingClub'               aa       73
+'TypingClub'               ab       65
+'TypingClub'               ac       80
+'TypingClub'               ad       50
+'TypingClub'               ae       55
+'TypingClub'               af       70
+"
+)
+
+Data = read.table(textConnection(Input),header=TRUE)
+
+```
+
+
+
+
+# b. Examine the data (look at head and tail)
+
+```{r}
+head(Data)
+tail(Data)
+```
+
+
+# c. Examine the structure (str) of the data
+```{r}
+str(Data)
+```
+
+
+# d. Find the Mean (mean) and Standard Deviation (sd) by Program of the data
+
+```{r}
+library(tidyverse)
+Data%>%group_by(Program)%>% summarize(Program_mean = mean(WPM))
+```
+```{r}
+Data%>% group_by(Program) %>%  summarize(Program_sd = sd(WPM))
+```
+
+
+# e. Create a botplot of the data (by Program)
+
+```{r}
+ggplot(Data, aes(Program,WPM)) + geom_boxplot()
+```
+
+
+# f. Create a histogram of the data (by Program)
+```{r}
+jack = ggplot(Data, aes(WPM)) + geom_histogram(fill="lightblue",breaks = seq(30,80, by=10)) +facet_wrap(~Program) +theme_classic()
+
+jack
+```
+# g. Run a t-test on the data
+```{r}
+
+ind.t.test<-t.test(WPM ~ Program, data = Data)
+
+ind.t.test
+```
+
+
+
+# h. report your findings using APA format 
+
+#The 16 students who participated in the TypingClub #(M=66, #SD=8.41) compared to the 16 students in the #Dance Mat #Typing group(M=55, SD=8.84) demonstrated #significantly #better typing speed t(29) = -3.583, p=0.001.
+
+```{r}
+nrow(Data)
+```
+
+
+
+
+ 

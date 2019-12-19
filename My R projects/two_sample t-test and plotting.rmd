@@ -1,0 +1,117 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+# a. Reading in the data (R code given)
+
+```{r}
+library(tidyverse)
+
+exfile <- "http://www.itk.ilstu.edu/faculty/jrwolf/ssl.csv"
+df <- read_csv(exfile)
+```
+# b. Examine the data (look at head and tail)
+
+```{r}
+head(df)
+tail(df)
+```
+# c. Examine the structure (str) of the data
+
+```{r}
+str(df)
+
+```
+
+# d1. Find the Mean (mean) and Standard Deviation (sd) by NSA of SSL
+```{r}
+df %>% 
+  group_by(nsa) %>% 
+  summarize(ssl_sd = sd(ssl))
+```
+
+```{r}
+df %>% 
+  group_by(nsa) %>% 
+  summarize(ssl_mean = mean(ssl))
+```
+# d2. Find the Mean (mean) and Standard Deviation (sd) by paper of SSL
+```{r}
+df %>% 
+  group_by(paper) %>% 
+  summarize(ssl_sd = sd(ssl))
+```
+
+```{r}
+df %>% 
+  group_by(paper) %>% 
+  summarize(ssl_sd = mean(ssl))
+```
+
+
+
+
+
+
+
+# e1. Create a boxplot of SSL (by NSA )
+
+```{r}
+ggplot(df, aes(nsa, ssl, group=nsa)) +
+geom_boxplot(aes())
+```
+# e2. Create a boxplot of SSL (by paper )
+
+```{r}
+ggplot(df, aes(paper, ssl, group=paper)) +
+
+  geom_boxplot(aes())
+```
+
+
+# f. Create a histogram of SSL (by NSA)
+```{r}
+
+ggplot(df, aes(ssl)) +
+geom_histogram(fill="lightblue", color="blue",
+breaks=seq(0,5,1))+
+facet_wrap(~nsa)
+```
+
+
+
+# f. Create a histogram of SSL (by paper)
+```{r}
+
+ggplot(df, aes(ssl)) +
+geom_histogram(fill="lightblue", color="blue",
+breaks=seq(0,5,1))+
+facet_wrap(~paper)
+```
+
+
+# g1. Run a t-test on SSL (by NSA)
+
+```{r}
+ind.t.test<-t.test(ssl ~ nsa, data = df)
+
+ind.t.test
+```
+
+
+
+The 112 schools with NSA COE designation (M=3.56, SD=1.49) did not have significantly higher SSL Test scores compared to the 479 schools w/o a NSA COE designation (M=3.49, SD=1.57), t(173.94) = -0.48186, p=0.063.
+
+# g2. Run a t-test on SSL (by paper)
+
+
+```{r}
+ind.t.test<-t.test(ssl ~ paper, data = df)
+
+ind.t.test
+```
+# h. report your findings for both t-tests using APA format (https://www.socscistatistics.com/tutorials/ttest/default.aspx)
+
+The 62 schools who were strong in research (M=3.82, SD=1.41) did not have significantly higher SSL Test scores compared to the 529 schools w/o a paper accepted at the ACM and IEEE conferences (M=3.46, SD=1.57), t(79.859) = -1.877, p=0.064.
+

@@ -1,0 +1,42 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r}
+library(tidyverse)
+head(mtcars)
+```
+
+```{r}
+p <- ggplot(mtcars, aes(mpg, wt)) + geom_point() +geom_smooth(method=lm, se=FALSE)
+p
+  
+```
+```{r}
+
+data(matcars)
+fit = lm(mpg ~ wt, data=mtcars)
+summary(fit)
+
+
+```
+
+
+
+
+```{r}
+pval <- summary(fit)$coefficients[2,4]
+tvalue <- summary(fit)$coefficients[2,3]
+beta <- summary(fit)$coefficients[2,1]
+rsq <- summary(fit)$r.squared
+fstats <-summary(fit)$fstatistic
+df2 <-summary(fit)$df[2]
+str(fstats)
+```
+
+
+Weight significantly predicted fuel efficienty (MPG), b = `r round(beta,2)`, t(`r df2`) = `r round(tvalue,2)`, p = `r round(pval,2)`. Weight also explained a significant proportion of variance in fuel efficienty, R2 = `r round(rsq, 2)`, F( `r fstats[2]`, `r fstats[3]` ) = `r round(fstats[1],2)`, p = `r round(pval,2)`.
+
+

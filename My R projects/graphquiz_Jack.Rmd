@@ -1,0 +1,51 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+Jack Luu
+
+IT497
+
+```{r}
+library(tidyverse)
+df_gss<-read_csv("http://www.itk.ilstu.edu/faculty/jrwolf/gss200.csv")
+```
+
+
+```{r}
+str(df_gss)
+```
+
+```{r}
+head(df_gss, 5)
+tail(df_gss,5)
+```
+```{r}
+library(ggplot2)
+num5 <- ggplot(df_gss, aes(race, realrinc, fill = race))
+
+num5+ stat_summary(fun.y = mean, geom = "bar") +  
+
+stat_summary(fun.data = mean_cl_normal, geom = "errorbar", 
+                            width = 0.2) + 
+facet_wrap( ~ female) +
+labs(x = "Race", y = "Income") + ggtitle("Real Income, Race and Gender") +
+theme(legend.position="none")
+
+
+
+
+```
+
+```{r}
+number8 <- ggplot(df_gss, aes(female, realrinc))
+
+number8 + geom_boxplot() + 
+labs(x = "Gender", y = "Income (in 1000's") + ggtitle("Real Income and Gender")
+
+
+
+```
+

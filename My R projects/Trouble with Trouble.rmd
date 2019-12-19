@@ -1,0 +1,43 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+# 1. create an R notebook -- name it 11-14-2019
+
+# 2. Load the **tidyverse packages**  and read in data -- given below.
+
+library(tidyverse)
+exfile <- "http://www.itk.ilstu.edu/faculty/jrwolf/pop-o-data.csv"
+df <- read_csv(exfile)
+df
+
+
+head(df)
+
+# 3. Use summarize to find the number of 1's, 2's, ..., 6's
+df%>%
+  group_by(pips)%>%
+  summarise(n=n())
+# 4. Use summarize and group-by to find the number of 1's, 2's, ..., 6's for the Pop-o-matic and Excel dice data. 
+
+dd <- df%>%
+  group_by(type, pips)%>%
+  summarise(n=n())
+dd
+
+# 5. Create a bar chart showing the number of 1's, 2's, ..., 6's for BOTH the Pop-o-matic and Excel dice data. Use facet_wrap() to show the charts side-by-side. 
+
+ggplot (dd, aes(pips, n, fill="pips"))+
+  
+  geom_bar(stat="identity", color="blue", fill="purple") +facet_wrap((~type))
+
+# 6. Knit your R Notebook into either a *.docx file or an HTML file. 
+
+# 7. Send both the R Notebook Rmd file and either the *.docx file or the HTML file to me via email.
+
+#SUBJECT: Trouble with Trouble
+
+```
+

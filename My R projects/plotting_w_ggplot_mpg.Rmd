@@ -1,0 +1,109 @@
+```{r}
+
+library(RWordPress)
+options(WordpressLogin = c(phongtruong1994 = '0Nholuon3211'),
+        WordpressURL = 'https://datascience4vn.com/xmlrpc.php')
+library(knitr)
+#knit2wp('10.17.Rmd', title = 'Your post title')
+
+
+
+knit2wp(input = '10.17.Rmd', 
+        title = "Hướng dẫn vẽ đồ thị bằng ggplot sử dụng bộ dữ liệu mpg", 
+        publish = FALSE,
+        #action = "editPost",
+        #postid = postID,
+        categories = "Ngôn ngữ R"
+       #mt_keywords = c('data science', 'knitr', 'R', 'R-Programming', 'WordPress', 'XML-RPC'),
+        #wp_post_thumbnail = 13433, # same number cannot be uses in serie- alternate *13433* with 12403
+        #mt_excerpt = my_exerpt
+)
+```
+```{r}
+opts_knit$set(upload.fun = imgur_upload, base.url = NULL)  # upload all images to imgur.com
+opts_chunk$set(fig.width = 5, fig.height = 5, cache = TRUE)
+```
+
+
+
+```{r}
+library(tidyverse)
+
+ggplot(mpg, aes(displ, hwy)) + geom_point() + geom_smooth(method =lm)
+
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+ggplot(mpg, aes(displ,hwy)) + geom_point(aes(color=drv)) + geom_smooth(se=FALSE)
+
+```
+
+
+
+```{r}
+
+
+ggplot(mpg, aes(displ, hwy, color=drv )) + geom_point() + geom_smooth(se=FALSE)
+
+```
+
+```{r}
+p <- ggplot(mpg, aes(x=class, y=hwy)) + geom_boxplot() 
+
+p
+```
+```{r}
+
+library(tidyverse)
+#str(diamonds)
+p <- ggplot(diamonds) +geom_bar(aes(cut))
+
+p
+```
+
+```{r}
+p <- ggplot(diamonds) +geom_bar(aes(cut))
+
+p + coord_flip()
+```
+
+```{r}
+ggplot(diamonds, aes(cut,price)) +    
+  
+geom_boxplot(outlier.colour="black", outlier.size=1) 
+
+
+```
+```{r}
+ggplot(diamonds, aes(carat,price)) +    
+  
+geom_point(outlier.colour="black") 
+```
+
+```{r}
+library(tidyverse)
+
+titanic = as.data.frame(Titanic)
+str(titanic)
+ggplot(titanic, aes(Sex, weight=Freq, fill=Survived)) + geom_bar(aes(x=Sex), position="dodge")+
+  facet_wrap(~Class, ncol=2)+
+  ggtitle("Titanic survival by sex and class")+
+  xlab("Sex") +ylab("Die/Lived")
+  
+```
+```{r}
+library(tidyverse)
+
+titanic = as.data.frame(Titanic)
+str(titanic)
+ggplot(titanic, aes(Survived,weight=Freq, fill=Survived)) + geom_bar(stat="count", position="Dodge")+
+  facet_grid(Age~Class)+
+  scale_fill_brewer(palette = "Dark2")
+
+```

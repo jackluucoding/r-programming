@@ -1,0 +1,23 @@
+```{r}
+library(stringi)
+library(tidyverse)
+library(tokenizers)
+
+x <- "1.Bảo anh,  2.bảo thy, Bảo thy, Ông cao thăng, văn lâm, Văn lâm,  bảo anh, Ông cao thắng!. Ôngcao thắng, bảo thi, Văn toàn-công phượng, Côngphượng....tuấn anh, //quang hải, 1.lam truong, 2. cam ly, 3.sơn tùng, den vâu, den vau...,!, @Den Vau..&, CONG PHUỜNG, %DEN VAU, @dOng nhi, @Tuan Anh, Ha Anh Tuan, (bao thi), (&Den Vau//, congphuong"
+
+x <- tolower(x)  ## chuyen data ve lower case
+x <- stri_trans_general(x, "Latin-ASCII") #xoa dau tieng Viet
+x = gsub(" ", "", x) #gop ten va ho lai voi nhau
+x  = str_replace_all(x, "[[:punct:]]", " ") #remove tat ca cac dau va ky tu dac biet
+x  = str_replace_all(x, "[[:digit:]]+", " ") #remove tat ca cac so 
+x = gsub("baothy", "baothi",x) #xu ly Bao Thy
+x <- tokenize_words(x) #tach tung ky tu ra 
+x <- table(unlist(x)) #chuyen du lieu ve factor
+final_list = sort(x, decreasing = TRUE) #sort du lieu theo thu tu giam dan
+final_list
+
+summary(final_list) ##tom tat du lieu
+```
+
+
+

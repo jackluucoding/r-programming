@@ -1,0 +1,187 @@
+```{r}
+library(tidyverse)
+
+Input =("
+State Pet Number
+Illinois Dogs 1627
+Indiana Dogs 989
+Iowa Dogs 407
+Illinois Cats 1321
+Indiana Cats 852
+Iowa Cats 370
+")
+
+df = read.table(textConnection(Input),header=TRUE)
+
+ggplot(df, aes(State, Number, fill=Pet)) + 
+  geom_bar(stat="identity", position= position_dodge(width = 0.5), alpha = .9)
+
+ggplot(df, aes(State, Number, fill = Pet))+
+  geom_histogram(stat="identity", position= position_dodge(width = 0.5), alpha = .9)
+
+#Fill/color in aes: default redist 
+# cannot have fill/color outside aes
+
+```
+
+```{r}
+
+
+
+library(tidyverse)
+
+Input =("
+State Pet Number
+Illinois Dogs 1627
+Indiana Dogs 989
+Iowa Dogs 407
+Illinois Cats 1321
+Indiana Cats 852
+Iowa Cats 370
+")
+
+df = read.table(textConnection(Input),header=TRUE)
+
+df %>% 
+  group_by(Pet) %>% 
+  summarize(pet_sd = sd(Number))
+
+```
+
+```{r}
+library(tidyverse)
+
+Input =("
+State Pet Number
+Illinois Dogs 1627
+Indiana Dogs 989
+Iowa Dogs 407
+Illinois Cats 1321
+Indiana Cats 852
+Iowa Cats 370
+")
+
+df = read.table(textConnection(Input),header=TRUE)
+
+ggplot(df, aes(Pet, Number)) +
+geom_boxplot()
+
+ggplot(df, aes(Pet, Number)) +
+geom_boxplot(aes(fill = Pet))
+```
+
+```{r}
+library(tidyverse)
+
+Input =("
+State         Dogs  Cats
+Illinois      1627  1321
+Indiana        989   852
+Iowa           407   370
+Maryland       667   645
+Michigan      1318  1192
+Minnesota      690   643
+Nebraska       240   222
+New_Jersey    1028   803
+Ohio          1708  1553
+Pennsylvania  1702  1748
+Wisconsin      796   776
+        ")
+
+df = read.table(textConnection(Input),header=TRUE)
+
+ggplot(df, aes(x=Dogs, y=Cats)) +
+geom_point() +
+geom_smooth(method = 'loess', se=FALSE, fullrange=TRUE, color = "gray") +
+theme_classic()
+```
+
+```{r}
+Input =("
+State         Dogs  Cats
+Illinois      1627  1321
+Indiana        989   852
+Iowa           407   370
+Maryland       667   645
+Michigan      1318  1192
+Minnesota      690   643
+Nebraska       240   222
+New_Jersey    1028   803
+Ohio          1708  1553
+Pennsylvania  1702  1748
+Wisconsin      796   776
+        ")
+
+df = read.table(textConnection(Input),header=TRUE)
+
+ggplot(df, aes(x=Dogs, y=Cats, color="black")) +
+geom_point() +
+geom_smooth(method = "lm", se=FALSE, fullrange=TRUE) +
+theme_classic()
+```
+
+```{r}
+URL = "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-29/state_milk_production.csv"
+df <- read.csv(URL)
+head(select(df, 1:3))
+```
+
+```{r}
+URL = "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-29/state_milk_production.csv"
+df <- read.csv(URL)
+summary(df$year)
+```
+
+```{r}
+URL = "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-29/state_milk_production.csv"
+df <- read.csv(URL)
+summary(df)
+```
+
+```{r}
+## create the data shown in the question
+#########################################
+library(tidyverse)
+URL <-"https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-11/cats_vs_dogs.csv"
+df<-read_csv(URL)
+
+df<-df %>% 
+  filter(state %in% c("Indiana", "Illinois", "Iowa", "Wisconsin"))
+df<-df %>% 
+  select(state, n_dog_households,n_cat_households )
+
+df<-df %>% rename(State = state, Dogs=n_dog_households, Cats=n_cat_households )
+#########################################
+
+# the R code in the question
+##############################
+
+df<-transmute(df, Pets = Dogs + Cats, Allan = Dogs - Cats, Jack = Dogs * Cats)
+
+df
+```
+
+```{r}
+## create the data shown in the question
+#########################################
+library(tidyverse)
+URL <-"https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-11/cats_vs_dogs.csv"
+df<-read_csv(URL)
+
+df<-df %>% 
+  filter(state %in% c("Indiana", "Illinois", "Iowa", "Wisconsin"))
+df<-df %>% 
+  select(state, n_dog_households,n_cat_households )
+
+df<-df %>% rename(State = state, Dogs=n_dog_households, Cats=n_cat_households )
+#########################################
+
+# the R code in the question
+##############################
+
+df <- mutate(df, Dogdetrend = Dogs - mean(Dogs, na.rm = TRUE), 
+          Catsdetrend = Cats - mean(Cats, na.rm = TRUE))
+
+df
+```
+

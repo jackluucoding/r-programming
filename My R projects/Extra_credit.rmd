@@ -1,0 +1,53 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+1- Use the code below to read in the bird_collisions and mp_light data.
+2 - recreate the graphs from the slides (both graphs)
+
+```{r}
+library(tidyverse)
+bird_collisions <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-30/bird_collisions.csv")
+str(bird_collisions)
+dim(bird_collisions)
+head(bird_collisions)
+
+bird_collisions <- bird_collisions %>% 
+  select(date:locality) %>%
+  arrange(date) %>%
+  filter(date >= as.Date("2000-03-06")) %>%
+  filter(locality == "MP") %>%
+  group_by(date) %>% 
+  tally()
+head(bird_collisions)
+
+mp_light <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-04-30/mp_light.csv")
+str(mp_light)
+dim(mp_light)
+head(mp_light)
+
+mp_bird_light<- mp_light %>% inner_join(bird_collisions)
+
+new_df= mp_bird_light %>%group_by(light_score)%>% summarize(avgBirds = mean(n))
+new_df
+
+head(mp_bird_light, 20)
+dim(mp_bird_light)
+library(ggthemes)
+
+```
+
+```{r}
+ggplot(new_df, aes(x=light_score, y=avgBirds)) +
+geom_point() +
+geom_smooth(method = 'lm', se=FALSE, fullrange=TRUE, color = "black") +
+theme_economist() + labs(title = "Chicago Bird Collisions", x="Night-time light at McCormick Place", y="Average number of bird Collisions")
+```
+```{r}
+ggplot(new_df, aes(x=light_score, y=avgBirds)) +
+geom_bar(stat="identity")+
+theme_economist() + labs(title = "Chicago Bird Collisions", x="Night-time light at McCormick Place", y="Average number of bird Collisions")
+```
+
+

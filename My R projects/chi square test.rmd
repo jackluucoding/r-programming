@@ -1,0 +1,56 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+Beige Book Quiz
+
+
+```{r}
+library(tidyverse)
+exfile <- "http://www.itk.ilstu.edu/faculty/jrwolf/redwhite.csv"
+
+df <- read_csv(exfile)
+```
+
+```{r}
+df1 <- gather(df, key="measure", value="value", c("Red", "White"))
+
+df1
+
+```
+
+```{r}
+ggplot(df1, aes(x=Pips, y=value))+
+  geom_bar(stat='identity', fill="dark blue")+
+  facet_wrap(~measure)
+```
+
+
+```{r}
+library(dplyr)
+
+dfRed = df %>%
+  select(Pips, Red)
+
+
+dfWhite = df %>%
+  select(Pips, White)
+
+```
+
+```{r}
+
+dfRed$Red %>% chisq.test()
+
+```
+
+```{r}
+dfWhite$White %>% chisq.test()
+```
+
+
+
+A chi-square test was performed to examine null hypthesis (HO) that the red dice is a fair dice which has the same probability of landing facing up (1/6). The results showed that p value < 0.05, df=5 (p < 2.2e-16) so the null hypothesis is rejected which means that the red dice is not a fair dice.  
+
+A chi-square test was performed to examine null hypthesis (HO) that the white dice is a fair dice which has the same probability of landing facing up (1/6). The results showed that p value < 0.05, df=5 (p < 2.2e-16) so the null hypothesis is rejected which means that the white dice is not a fair dice.  
