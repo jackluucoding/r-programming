@@ -1,20 +1,85 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
 ```{r}
+options(warn=-1)
+#install.packages("readxl")
+#install.packages("stringi")
+#install.packages("tidyverse")
+#install.packages("tokenizers")
+
 library(stringi)
 library(tidyverse)
 library(tokenizers)
 
-x <- "1.Bảo anh,  2.bảo thy, Bảo thy, Ông cao thăng, văn lâm, Văn lâm,  bảo anh, Ông cao thắng!. Ôngcao thắng, bảo thi, Văn toàn-công phượng, Côngphượng....tuấn anh, //quang hải, 1.lam truong, 2. cam ly, 3.sơn tùng, den vâu, den vau...,!, @Den Vau..&, CONG PHUỜNG, %DEN VAU, @dOng nhi, @Tuan Anh, Ha Anh Tuan, (bao thi), (&Den Vau//, congphuong"
+# Loading
+library("readxl")
+# xls files
+x = read_excel("W32 - Frequency.xlsx")
+```
 
-x <- tolower(x)  ## chuyen data ve lower case
-x <- stri_trans_general(x, "Latin-ASCII") #xoa dau tieng Viet
-x = gsub(" ", "", x) #gop ten va ho lai voi nhau
+
+
+```{r}
+x = tolower(x)  ## chuyen data ve lower case
+```
+
+
+```{r}
+x = stri_trans_general(x, "Latin-ASCII") #xoa dau tieng Viet
+
+```
+
+
+```{r}
+x =  gsub(" ", "", x) #gop ten va ho lai voi nhau
+```
+
+
+```{r}
 x  = str_replace_all(x, "[[:punct:]]", " ") #remove tat ca cac dau va ky tu dac biet
-x  = str_replace_all(x, "[[:digit:]]+", " ") #remove tat ca cac so 
-x = gsub("baothy", "baothi",x) #xu ly Bao Thy
-x <- tokenize_words(x) #tach tung ky tu ra 
-x <- table(unlist(x)) #chuyen du lieu ve factor
+x  = str_replace_all(x, "[[:digit:]]+", " ") #remove tat ca cac so
+```
+
+
+```{r}
+x = gsub("buitiendung", " tiendung ",x) 
+
+x = gsub("thumonbuitiendung", " tiendung ",x) 
+#x = gsub("buibuitiendung", " buitiendung ",x)
+
+x = gsub("cr", " CR7 ",x) 
+x = gsub("ronaldo", " CR7 ",x) 
+x = gsub("ronando", " CR7 ",x) 
+x = gsub("ronado", " CR7 ",x)  
+x = gsub("rolnado", " CR7 ",x)
+x = gsub("Cầu thủ ronaldo", " CR7 ",x)
+x = gsub("cr7istianocr7", " CR7 ",x)
+
+
+x = gsub("baothy", " baothi ",x) 
+x = gsub("sontungmpt", " SONTUNGMTP ",x)
+x = gsub("sontungmp", " SONTUNGMTP ",x) 
+x = gsub("nguyenthanhtung", " SONTUNGMTP ",x) 
+x = gsub("st", " SONTUNGMTP ",x) 
+
+x = gsub("huonggiangidol", " huonggiang ",x) 
+x = gsub("casihuonggiang", " huonggiang ",x) 
+
+
+
+```
+
+
+```{r}
+x = tokenize_words(x) #tach tung ky tu ra 
+x = table(unlist(x)) #chuyen du lieu ve factor
 final_list = sort(x, decreasing = TRUE) #sort du lieu theo thu tu giam dan
-final_list
+
+head(final_list,10)
 
 summary(final_list) ##tom tat du lieu
 ```
